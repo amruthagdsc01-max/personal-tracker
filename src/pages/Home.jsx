@@ -5,6 +5,7 @@ import { Blossom, FlowerBranch, WaxSeal, TapeStrip } from '../components/Floral.
 import { Card, Ring } from '../components/ui.jsx'
 import Standing from '../components/Standing.jsx'
 import UpcomingBanner from '../components/UpcomingBanner.jsx'
+import BackupReminder from '../components/BackupReminder.jsx'
 import { FAQ } from '../data/career.js'
 import { ALL_PROBLEMS } from '../data/dsa.js'
 import { ALL_LESSONS } from '../data/learn.js'
@@ -88,6 +89,7 @@ export default function Home({ go }) {
         ))}
       </section>
 
+      <BackupReminder />
       <UpcomingBanner go={go} />
       <Standing go={go} compact />
 

@@ -1,3 +1,6 @@
+// Built for GitHub Pages (no backend): no login, progress lives in this browser.
+export const STATIC = import.meta.env.VITE_STATIC === '1'
+
 const AUTH_KEY = 'ezze/auth'
 
 export const loadAuth = () => {

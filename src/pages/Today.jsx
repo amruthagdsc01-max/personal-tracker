@@ -5,6 +5,7 @@ import { PageHead, Card, Chip, Bar } from '../components/ui.jsx'
 import { FocusTimer, ProblemRow, Quiz, SpeakLog } from '../components/blocks.jsx'
 import { LessonCard, StepCard } from '../components/cards.jsx'
 import UpcomingBanner from '../components/UpcomingBanner.jsx'
+import BackupReminder from '../components/BackupReminder.jsx'
 import { BLOCKS, DAY_MODES } from '../domain/model.js'
 import { blockDone, mentor, modeOf, planFor, streakInfo, visibleBlocks } from '../domain/engine.js'
 import { LESSON_BY_ID } from '../data/learn.js'
@@ -69,6 +70,7 @@ export default function Today({ go }) {
       <PageHead script={weekday(date)} title="Today’s plan" sub={fmt(date, { day: 'numeric', month: 'long', year: 'numeric' })}
         right={<div className="daytype">{Object.entries(DAY_MODES).map(([k, v]) => <Chip key={k} active={mode === k} onClick={() => setMode(date, k)}>{v.label}</Chip>)}</div>} />
 
+      <BackupReminder />
       <UpcomingBanner go={go} />
 
       <Card tilt={false} className="mentor">
