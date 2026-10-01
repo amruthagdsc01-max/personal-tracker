@@ -1,0 +1,88 @@
+// CS fundamentals MCQ bank for mock interviews. Options are shuffled at runtime,
+// so `answer` is simply the index of the correct option as written here.
+const Q = (id, topic, q, options, answer, why) => ({ id, topic, q, options, answer, why })
+
+export const CS_TOPICS = { oop: 'OOP', dbms: 'DBMS', os: 'Operating systems', cn: 'Networks', python: 'Python', sql: 'SQL', api: 'APIs & web', dsa: 'Complexity & structures' }
+
+export const CS_QUESTIONS = [
+  // ---- OOP
+  Q('c1', 'oop', 'Which OOP principle bundles data with the methods that operate on it and restricts direct access to the data?', ['Inheritance', 'Encapsulation', 'Polymorphism', 'Recursion'], 1, 'Encapsulation keeps state private behind a controlled interface.'),
+  Q('c2', 'oop', 'Method overriding is an example of:', ['Compile-time polymorphism', 'Runtime polymorphism', 'Encapsulation', 'Function overloading'], 1, 'Which override runs is decided at runtime by the object’s actual type.'),
+  Q('c3', 'oop', 'In Java, which keyword prevents a class from being subclassed?', ['static', 'abstract', 'final', 'private'], 2, 'A final class cannot be extended.'),
+  Q('c4', 'oop', 'Which of these CANNOT be instantiated directly?', ['A concrete class', 'An abstract class', 'A class with a constructor', 'A subclass'], 1, 'Abstract classes are meant to be extended.'),
+  Q('c5', 'oop', '“A Car has an Engine” is best described as:', ['Inheritance', 'Composition', 'Overloading', 'Recursion'], 1, 'Has-a relationships are composition; is-a relationships are inheritance.'),
+  Q('c6', 'oop', 'In Python, a child class calls a method of its parent using:', ['parent()', 'base()', 'super()', 'this()'], 2, 'super() returns a proxy to the parent class.'),
+  Q('c7', 'oop', 'Which statement is true in Java?', ['A class can extend two classes', 'A class can implement several interfaces', 'Interfaces cannot be implemented', 'Abstract classes can be instantiated'], 1, 'Java allows one superclass but many interfaces.'),
+  Q('c8', 'oop', 'Which is NOT one of the four classic OOP pillars?', ['Abstraction', 'Compilation', 'Inheritance', 'Polymorphism'], 1, 'The pillars are abstraction, encapsulation, inheritance and polymorphism.'),
+  Q('c9', 'oop', 'Method overloading means:', ['Same method name with different parameter lists', 'A child replacing a parent method', 'Calling a method recursively', 'Hiding a method'], 0, 'Overloading differs by parameters; overriding differs by class.'),
+  Q('c10', 'oop', 'What does a constructor do?', ['Destroys an object', 'Initialises a new object', 'Imports a library', 'Sorts fields'], 1, 'It runs when an object is created, to set up its state.'),
+  // ---- DBMS
+  Q('c11', 'dbms', 'Which normal form removes partial dependencies on a composite key?', ['1NF', '2NF', '3NF', 'BCNF'], 1, '2NF requires every non-key attribute to depend on the whole key.'),
+  Q('c12', 'dbms', 'In ACID, the “D” stands for:', ['Dependency', 'Durability', 'Deletion', 'Distribution'], 1, 'Committed data survives crashes.'),
+  Q('c13', 'dbms', 'A primary key must be:', ['Unique and NOT NULL', 'Unique but may be NULL', 'Repeated across rows', 'A text column'], 0, 'It identifies each row uniquely.'),
+  Q('c14', 'dbms', 'A foreign key:', ['Encrypts a column', 'References a key in another table', 'Sorts the table', 'Must be unique always'], 1, 'It enforces referential integrity between tables.'),
+  Q('c15', 'dbms', 'Reading another transaction’s uncommitted changes is called a:', ['Phantom read', 'Dirty read', 'Lost update', 'Deadlock'], 1, 'Dirty reads happen at the lowest isolation level.'),
+  Q('c16', 'dbms', 'Which index structure do most relational databases use by default?', ['B-tree', 'Trie', 'Stack', 'Bloom filter'], 0, 'B-trees support equality and range lookups.'),
+  Q('c17', 'dbms', '“All or nothing” describes which ACID property?', ['Atomicity', 'Isolation', 'Consistency', 'Durability'], 0, 'A transaction either fully applies or not at all.'),
+  Q('c18', 'dbms', 'The main goal of normalisation is to:', ['Increase redundancy', 'Reduce redundancy and anomalies', 'Speed up every query', 'Encrypt data'], 1, 'It removes duplicate data to avoid update anomalies.'),
+  Q('c19', 'dbms', 'Which JOIN returns only rows with matches in both tables?', ['LEFT JOIN', 'RIGHT JOIN', 'INNER JOIN', 'FULL OUTER JOIN'], 2, 'INNER JOIN keeps only matched rows.'),
+  Q('c20', 'dbms', 'The CAP theorem lists Consistency, Availability and:', ['Concurrency', 'Partition tolerance', 'Performance', 'Persistence'], 1, 'During a network partition you must trade consistency against availability.'),
+  // ---- OS
+  Q('c21', 'os', 'Threads of the same process share:', ['Stack', 'Registers', 'Address space and heap', 'Program counter'], 2, 'Each thread has its own stack and registers.'),
+  Q('c22', 'os', 'Which is NOT a necessary condition for deadlock?', ['Mutual exclusion', 'Hold and wait', 'Circular wait', 'Pre-emption'], 3, '“No pre-emption” is necessary; pre-emption itself would break deadlock.'),
+  Q('c23', 'os', 'Which scheduling algorithm gives each process a fixed time slice in turn?', ['FCFS', 'Round Robin', 'Shortest Job First', 'Priority'], 1, 'Round Robin uses a time quantum.'),
+  Q('c24', 'os', 'Virtual memory lets a system:', ['Run programs larger than physical RAM', 'Avoid using a CPU', 'Remove the need for disks', 'Speed up the network'], 0, 'Pages are swapped between RAM and disk.'),
+  Q('c25', 'os', 'A page fault occurs when:', ['A page is not currently in RAM', 'The disk is full', 'A process ends', 'The CPU overheats'], 0, 'The OS must load the page from disk.'),
+  Q('c26', 'os', 'Which is the fastest storage in the memory hierarchy?', ['Hard disk', 'RAM', 'CPU cache', 'SSD'], 2, 'Cache sits closest to the CPU.'),
+  Q('c27', 'os', 'A context switch is:', ['Saving one process’s state and loading another’s', 'Formatting a disk', 'Compiling code', 'Opening a socket'], 0, 'It lets many processes share one CPU.'),
+  Q('c28', 'os', 'Thrashing means:', ['Too many cache hits', 'The system spends more time paging than executing', 'A process that never ends', 'Network congestion'], 1, 'Memory is over-committed.'),
+  Q('c29', 'os', 'A system call moves the CPU from user mode to:', ['Kernel mode', 'Safe mode', 'Sleep mode', 'Debug mode'], 0, 'Privileged work happens in kernel mode.'),
+  Q('c30', 'os', 'A semaphore is mainly used for:', ['Synchronisation between processes or threads', 'Compressing files', 'Drawing graphics', 'Hashing passwords'], 0, 'It controls access to shared resources.'),
+  // ---- Networks
+  Q('c31', 'cn', 'TCP operates at which OSI layer?', ['Network', 'Transport', 'Data link', 'Application'], 1, 'TCP and UDP are transport-layer protocols.'),
+  Q('c32', 'cn', 'The default port for HTTPS is:', ['80', '22', '443', '8080'], 2, 'HTTP uses 80; HTTPS uses 443.'),
+  Q('c33', 'cn', 'DNS is used to:', ['Translate domain names to IP addresses', 'Encrypt traffic', 'Assign MAC addresses', 'Compress pages'], 0, 'It is the internet’s phone book.'),
+  Q('c34', 'cn', 'Which protocol is connectionless?', ['TCP', 'UDP', 'FTP', 'SMTP'], 1, 'UDP sends datagrams without a handshake.'),
+  Q('c35', 'cn', 'An IPv4 address is how many bits long?', ['16', '32', '64', '128'], 1, 'Four 8-bit octets = 32 bits.'),
+  Q('c36', 'cn', 'The TCP three-way handshake is:', ['SYN, SYN-ACK, ACK', 'ACK, SYN, FIN', 'SYN, ACK, FIN', 'HELLO, OK, DONE'], 0, 'It establishes a reliable connection.'),
+  Q('c37', 'cn', 'Which device operates at the network layer?', ['Hub', 'Switch', 'Router', 'Repeater'], 2, 'Routers forward packets using IP addresses.'),
+  Q('c38', 'cn', 'ARP resolves:', ['IP address to MAC address', 'Domain to IP', 'Port to process', 'URL to file'], 0, 'It maps layer-3 addresses to layer-2 addresses.'),
+  Q('c39', 'cn', 'TLS mainly provides:', ['Encryption and authentication in transit', 'Faster routing', 'IP assignment', 'Load balancing'], 0, 'It protects data between client and server.'),
+  Q('c40', 'cn', 'Which protocol is used to send email?', ['SMTP', 'HTTP', 'SSH', 'DHCP'], 0, 'SMTP transfers mail between servers.'),
+  // ---- Python
+  Q('c41', 'python', 'Which of these is mutable?', ['tuple', 'str', 'list', 'int'], 2, 'Lists can be changed in place.'),
+  Q('c42', 'python', 'What is len({1, 2, 2, 3})?', ['4', '3', '2', 'Error'], 1, 'A set drops the duplicate 2.'),
+  Q('c43', 'python', 'list(range(3)) gives:', ['[1, 2, 3]', '[0, 1, 2]', '[0, 1, 2, 3]', '[3]'], 1, 'range(3) is 0, 1, 2.'),
+  Q('c44', 'python', 'Which keyword turns a function into a generator?', ['return', 'yield', 'async', 'lambda'], 1, 'yield produces values lazily.'),
+  Q('c45', 'python', 'Average time for a dictionary lookup by key:', ['O(1)', 'O(n)', 'O(log n)', 'O(n²)'], 0, 'Hash tables give constant-time average lookups.'),
+  Q('c46', 'python', 'In Python, `a is b` checks:', ['Equal values', 'Same object identity', 'Same type', 'Same length'], 1, '`==` compares values; `is` compares identity.'),
+  Q('c47', 'python', '[1, 2, 3][-1] evaluates to:', ['1', '2', '3', 'Error'], 2, 'Negative indexes count from the end.'),
+  Q('c48', 'python', 'A decorator is:', ['A function that wraps another function to extend its behaviour', 'A comment style', 'A loop type', 'A file format'], 0, '@decorator is sugar for f = decorator(f).'),
+  Q('c49', 'python', 'The GIL in CPython means:', ['Only one thread runs Python bytecode at a time', 'Programs cannot use files', 'Threads are unsupported', 'Memory is unlimited'], 0, 'CPU-bound code gains little from threads; use processes.'),
+  // ---- SQL
+  Q('c50', 'sql', 'Which clause filters groups after aggregation?', ['WHERE', 'HAVING', 'ORDER BY', 'LIMIT'], 1, 'WHERE filters rows before grouping; HAVING filters groups.'),
+  Q('c51', 'sql', 'COUNT(column) differs from COUNT(*) because it:', ['Ignores NULLs in that column', 'Counts only unique values', 'Is slower always', 'Counts deleted rows'], 0, 'COUNT(*) counts rows; COUNT(col) counts non-NULL values.'),
+  Q('c52', 'sql', 'Which keyword removes duplicate rows from a result?', ['UNIQUE', 'DISTINCT', 'DROP', 'GROUP'], 1, 'SELECT DISTINCT returns unique rows.'),
+  Q('c53', 'sql', 'A LEFT JOIN returns:', ['Only matching rows', 'All rows from the left table plus matches from the right', 'All rows from both tables always', 'Only unmatched rows'], 1, 'Unmatched right-side columns are NULL.'),
+  Q('c54', 'sql', 'Which logically runs first?', ['SELECT', 'WHERE', 'HAVING', 'ORDER BY'], 1, 'Logical order: FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY.'),
+  Q('c55', 'sql', 'TRUNCATE TABLE compared with DELETE (no WHERE):', ['Removes all rows quickly, usually without per-row logging', 'Removes only one row', 'Drops the table structure', 'Cannot be used on large tables'], 0, 'TRUNCATE is bulk removal and typically resets the table fast.'),
+  // ---- APIs & web
+  Q('c56', 'api', 'Which HTTP method is meant to be safe and idempotent?', ['POST', 'GET', 'PATCH', 'DELETE'], 1, 'GET should not change server state.'),
+  Q('c57', 'api', 'HTTP 401 means:', ['Not authenticated', 'Forbidden for a logged-in user', 'Not found', 'Server error'], 0, '401 = missing/invalid credentials; 403 = not allowed.'),
+  Q('c58', 'api', 'A JWT is:', ['A signed token carrying claims', 'A database', 'A cache', 'A CSS framework'], 0, 'The signature lets the server verify it was not altered.'),
+  Q('c59', 'api', 'Which method is typically used to create a resource?', ['GET', 'POST', 'HEAD', 'OPTIONS'], 1, 'POST /items creates a new item.'),
+  Q('c60', 'api', 'Repeating the same PUT request should:', ['Produce the same end state (idempotent)', 'Create duplicates each time', 'Always fail', 'Delete the resource'], 0, 'PUT replaces a resource with a given representation.'),
+  Q('c61', 'api', 'CORS is:', ['A browser mechanism controlling cross-origin requests', 'A database engine', 'A password hash', 'A load balancer'], 0, 'The server opts in to which origins may call it.'),
+  Q('c62', 'api', 'Status code for successful creation:', ['200', '201', '204', '302'], 1, '201 Created.'),
+  Q('c63', 'api', 'A rate-limited request normally gets:', ['429 Too Many Requests', '404 Not Found', '201 Created', '301 Moved'], 0, '429 tells clients to slow down.'),
+  // ---- complexity & structures
+  Q('c64', 'dsa', 'Binary search on a sorted array runs in:', ['O(n)', 'O(log n)', 'O(n log n)', 'O(1)'], 1, 'The search space halves each step.'),
+  Q('c65', 'dsa', 'Which structure is used for BFS?', ['Stack', 'Queue', 'Heap', 'Trie'], 1, 'BFS processes nodes level by level in FIFO order.'),
+  Q('c66', 'dsa', 'Iterative DFS typically uses:', ['Queue', 'Stack', 'Array of queues', 'Hash set only'], 1, 'DFS goes deep first — LIFO.'),
+  Q('c67', 'dsa', 'Merge sort’s time complexity is:', ['O(n)', 'O(n log n)', 'O(n²)', 'O(log n)'], 1, 'It splits log n times and merges n elements each level.'),
+  Q('c68', 'dsa', 'Inserting into a binary heap takes:', ['O(1)', 'O(log n)', 'O(n)', 'O(n log n)'], 1, 'The new element may bubble up the height of the tree.'),
+  Q('c69', 'dsa', 'Worst-case lookup in a hash table (all keys collide) is:', ['O(1)', 'O(log n)', 'O(n)', 'O(n²)'], 2, 'Everything lands in one bucket.'),
+  Q('c70', 'dsa', 'A stack is:', ['FIFO', 'LIFO', 'Random access only', 'Sorted'], 1, 'Last in, first out.'),
+  Q('c71', 'dsa', 'Space used by a recursion that goes n calls deep is:', ['O(1)', 'O(n)', 'O(log n)', 'O(n²)'], 1, 'Each call adds a stack frame.'),
+]
+export const CS_BY_ID = Object.fromEntries(CS_QUESTIONS.map((q) => [q.id, q]))
