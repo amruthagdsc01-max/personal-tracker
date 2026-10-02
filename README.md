@@ -24,7 +24,17 @@ npm test                 # frontend/domain logic
 python -m pytest server  # API: auth, isolation, saving
 ```
 
-## Deploy (Render, free tier)
+## Deploy on GitHub Pages (recommended: free, never sleeps)
+
+This publishes ezze as a static site. There is no login or server: progress is saved in the browser, so use **Settings → Back up now** regularly (the app reminds you every 14 days).
+
+1. Push this repo to GitHub (branch `main`).
+2. On GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+3. Every push to `main` runs `.github/workflows/pages.yml` (tests, build, publish). The site appears at `https://<your-username>.github.io/<repo-name>/` — see the **Actions** tab for progress and the link.
+
+To build the same static version locally: `VITE_STATIC=1 VITE_BASE=/<repo-name>/ npm run build`.
+
+## Deploy with login + server storage (Render, optional)
 
 1. Push this folder to a GitHub repo.
 2. On render.com: **New → Blueprint**, pick the repo. `render.yaml` creates the web service and a PostgreSQL database and generates `SECRET_KEY` for you.

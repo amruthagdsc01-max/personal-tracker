@@ -419,3 +419,8 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -.015em; }
 .cal-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0; font-size: .92rem; } .cal-line.event { justify-content: space-between; background: var(--paper); border-radius: 12px; padding: .35rem .7rem; } .cal-line.study { background: var(--sand); border-radius: 12px; padding: .5rem .8rem; }
 .cal-add { display: flex; gap: 8px; } .cal-add input { padding: .5em .8em; font-size: .9rem; }
 @media (max-width: 900px) { .cal-back { place-items: end center; padding: 12px; } .cal-panel { max-height: calc(100vh - 40px); } }
+
+/* ---------- backup reminder ---------- */
+.backup-reminder { display: flex; align-items: center; gap: 14px; padding: .9rem 1.2rem; margin-bottom: 18px; border-radius: 22px; border: 2px solid var(--amber); background: linear-gradient(135deg, #fff4e0, var(--paper)); }
+.backup-reminder span { flex: 1; display: grid; } .backup-reminder small { font-weight: 600; opacity: .85; }
+.backup-warn { color: #9a5a12; font-weight: 800; }

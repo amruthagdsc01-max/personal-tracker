@@ -3,6 +3,7 @@ import { emptyState } from './domain/model.js'
 import { today, addDays } from './domain/dates.js'
 import { makePlan } from './domain/engine.js'
 import { api, ApiError, loadAuth, saveAuth } from './api.js'
+import { downloadBackup } from './backup.js'
 
 const GUEST_KEY = 'ezze/v1'
 const Ctx = createContext(null)
@@ -109,6 +110,9 @@ export function StoreProvider({ children }) {
     return () => clearTimeout(t)
   }, [state, auth, ready, logout, notify])
 
+  // ask the browser not to evict our data when storage is tight (harmless if refused)
+  useEffect(() => { try { navigator.storage?.persist?.() } catch { /* ignore */ } }, [])
+
   // retry after the connection returns; also create today's plan if the tab stayed open past midnight
   useEffect(() => {
     const check = () => setState((prev) => (prev.plans[today()] ? prev : rollover(prev, today())))
@@ -137,6 +141,7 @@ export function StoreProvider({ children }) {
       register: (form) => authenticate('register', form),
       logout: () => logout('Logged out.'),
       deleteAccount: async () => { await api('/account', { method: 'DELETE', token: auth.token }); logout('Account deleted.') },
+      backupNow: () => { downloadBackup(state, date); update((s) => { s.profile.lastBackup = date }); notify('Backup saved to your downloads.') },
       reset: () => { setState(rollover(emptyState(), today())); notify('Fresh start.') },
       replace: (data) => setState(rollover({ ...emptyState(), ...data }, today())),
       setMode: (d, mode) => update((s) => { if (mode === 'full') delete s.dayTypes[d]; else s.dayTypes[d] = mode }),

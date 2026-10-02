@@ -15,6 +15,7 @@ import Progress from './pages/Progress.jsx'
 import Settings from './pages/Settings.jsx'
 import AuthScreen from './pages/AuthScreen.jsx'
 import CalendarPanel from './components/CalendarPanel.jsx'
+import { STATIC } from './api.js'
 
 const PAGES = [
   { id: 'home', label: 'Home', icon: HomeIcon, C: HomePage },
@@ -80,7 +81,7 @@ export default function App() {
           ))}
         </div>
         <button className="cal-btn" onClick={() => setCalOpen(true)} aria-label="Open calendar" title="Calendar"><CalendarDays size={18} /></button>
-        {S ? <span className={`sync ${S.cls}`} title={S.text}><S.icon size={15} /><span>{S.text}</span></span> : <button className="sync login-btn" onClick={openAuth} title="Optional: log in to keep your progress safe and use it on any device"><LogIn size={15} /><span>Log in</span></button>}
+        {STATIC ? <span className="sync" title="Your progress is saved in this browser"><Cloud size={15} /><span>Saved here</span></span> : S ? <span className={`sync ${S.cls}`} title={S.text}><S.icon size={15} /><span>{S.text}</span></span> : <button className="sync login-btn" onClick={openAuth} title="Optional: log in to keep your progress safe and use it on any device"><LogIn size={15} /><span>Log in</span></button>}
         <button className="kbd-btn" onClick={() => setPalette(true)} aria-label="Search"><Search size={16} /><span>Ctrl K</span></button>
       </nav>
       <main className="main" key={page}><Current go={go} /></main>
