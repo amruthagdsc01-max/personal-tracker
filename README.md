@@ -44,6 +44,16 @@ Any host that runs Docker works the same way: build the `Dockerfile`, set `SECRE
 
 Free-tier hosts may sleep when idle (first load can take ~30 s), and free databases can expire — use **Settings → Export backup** now and then.
 
+## System Design module (the **Design** tab)
+
+A one-hour-a-day System Design course inside ezze: 25 lessons in 5 stages (how the web works → databases → core components → distributed systems → interview method), each taught WHY → WHAT → HOW → WHEN → TRADE-OFF across four gated levels (Understand, Explore, Apply, Master), with think-first prompts, quizzes, an explain-it-back step and a challenge. Plus a concept dependency map, 8 working labs (load balancer, cache, replication, sharding, queue, rate limiter, estimator, architecture playground), 4 guided design problems with a scored 8-dimension mock interview, per-stage practical assessments, an interview question bank, real-world case studies, spaced repetition and a lesson-grounded mentor.
+
+- Progress is stored in the same saved state as the rest of ezze (`state.sd`): browser storage on GitHub Pages, your account when logged in. Mastery comes only from evidence (quizzes, self-checked explanations, scenarios, reviews), never from opening pages.
+- Content lives in `src/data/sd/`, logic in `src/domain/sd/` (tested: `npm test`), UI in `src/pages/sd/`. A curriculum test checks prerequisites, quiz answers and rubrics.
+- Free-text answers are scored by self-assessment against a rubric; keyword matching only flags suggestions.
+- Optional AI mentor: set `MENTOR_API_KEY` (and optionally `MENTOR_MODEL`) on the server. The key stays server-side and the model is told to answer only from the lesson text. Without it, the built-in mentor (lesson retrieval, hints, follow-ups) works everywhere, including GitHub Pages.
+- Not included yet: intermediate and advanced full design problems (WhatsApp, YouTube, Uber, ...). Four beginner problems are built; the mock mode and rubric are ready for more.
+
 ## Notes
 
 - Passwords are hashed with scrypt; login attempts are rate-limited per IP+email.

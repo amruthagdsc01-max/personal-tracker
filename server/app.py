@@ -11,6 +11,7 @@ import os
 import re
 import secrets
 import time
+import urllib.request
 from collections import defaultdict, deque
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -36,6 +37,10 @@ if not SECRET_KEY:
 TOKEN_DAYS = int(os.getenv("TOKEN_DAYS", "30"))
 MAX_STATE_BYTES = 2 * 1024 * 1024
 ALLOW_SIGNUP = os.getenv("ALLOW_SIGNUP", "true").lower() != "false"
+# Optional AI mentor for the System Design module. Off unless a key is set; never hard-coded, never sent to the browser.
+MENTOR_API_KEY = os.getenv("MENTOR_API_KEY", "")
+MENTOR_MODEL = os.getenv("MENTOR_MODEL", "claude-haiku-5-5")
+MENTOR_URL = os.getenv("MENTOR_URL", "https://api.anthropic.com/v1/messages")
 DIST = Path(__file__).resolve().parent.parent / "dist"
 
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
@@ -207,6 +212,45 @@ def put_state(body: StateIn, user: User = Depends(current_user), db: Session = D
         row.updated_at = datetime.now(timezone.utc)
     db.commit()
     return {"rev": row.rev}
+
+
+class MentorIn(BaseModel):
+    question: str = Field(min_length=2, max_length=600)
+    context: str = Field(default="", max_length=12000)
+
+
+MENTOR_SYSTEM = (
+    "You are a System Design mentor inside a learning platform. Answer ONLY using the lesson text provided in the context. "
+    "If the context does not contain the answer, say that it is not covered here and suggest which topic to study. "
+    "Never invent facts, numbers or company claims. Be concise (under 180 words), use simple language, and prefer asking "
+    "a guiding question or giving a hint before the full answer. Never say the learner has mastered or completed anything."
+)
+
+
+@app.get("/api/mentor/status")
+def mentor_status():
+    return {"enabled": bool(MENTOR_API_KEY)}
+
+
+@app.post("/api/mentor")
+def mentor(body: MentorIn, request: Request, user: User = Depends(current_user)):
+    if not MENTOR_API_KEY:
+        raise HTTPException(503, "The AI mentor is not configured on this server")
+    throttle(f"mentor:{user.id}", limit=30, window=3600)
+    payload = json.dumps({
+        "model": MENTOR_MODEL, "max_tokens": 500, "system": MENTOR_SYSTEM,
+        "messages": [{"role": "user", "content": "LESSON TEXT:\n" + body.context + "\n\nQUESTION: " + body.question}],
+    }).encode()
+    req = urllib.request.Request(MENTOR_URL, data=payload, method="POST", headers={
+        "content-type": "application/json", "x-api-key": MENTOR_API_KEY, "anthropic-version": "2023-06-01"})
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:  # noqa: S310 (fixed https URL from config)
+            out = json.loads(resp.read())
+        text = "".join(b.get("text", "") for b in out.get("content", []) if b.get("type") == "text").strip()
+    except Exception as exc:  # network, quota, bad key: report plainly, never leak the key
+        log.warning("mentor call failed: %s", type(exc).__name__)
+        raise HTTPException(502, "The AI mentor could not answer right now") from exc
+    return {"answer": text or "I could not produce an answer. Try rephrasing."}
 
 
 @app.delete("/api/account", status_code=204)

@@ -76,3 +76,11 @@ def test_delete_account_removes_everything():
     client.put("/api/state", headers=auth(token), json={"data": {"v": 1}})
     assert client.delete("/api/account", headers=auth(token)).status_code == 204
     assert client.get("/api/me", headers=auth(token)).status_code == 401
+
+
+def test_mentor_is_off_without_a_key_and_requires_login():
+    assert client.get("/api/mentor/status").json() == {"enabled": False}
+    token = register().json()["token"]
+    r = client.post("/api/mentor", json={"question": "what is a cache?", "context": "x"}, headers=auth(token))
+    assert r.status_code == 503
+    assert client.post("/api/mentor", json={"question": "what is a cache?"}).status_code in (401, 403)

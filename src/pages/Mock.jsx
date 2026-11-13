@@ -80,12 +80,12 @@ function TrendChart({ points }) {
   return (
     <ResponsiveContainer width="100%" height={200}>
       <LineChart data={points} margin={{ left: 0, right: 12, top: 10 }}>
-        <CartesianGrid vertical={false} stroke="#F6CFCA" />
+        <CartesianGrid vertical={false} stroke="#EAD5B5" />
         <XAxis dataKey="label" tickLine={false} axisLine={false} />
         <YAxis domain={[0, 100]} width={34} tickLine={false} axisLine={false} />
-        <ReferenceLine y={60} stroke="#C2475E" strokeDasharray="4 4" label={{ value: 'pass ~60', position: 'insideTopRight', fill: '#C2475E', fontSize: 11 }} />
+        <ReferenceLine y={60} stroke="#C2562F" strokeDasharray="4 4" label={{ value: 'pass ~60', position: 'insideTopRight', fill: '#C2562F', fontSize: 11 }} />
         <Tooltip formatter={(v) => `${v}%`} />
-        <Line type="monotone" dataKey="score" stroke="#4A1A09" strokeWidth={3} dot={{ r: 5, fill: '#C2475E' }} />
+        <Line type="monotone" dataKey="score" stroke="#3B2418" strokeWidth={3} dot={{ r: 5, fill: '#C2562F' }} />
       </LineChart>
     </ResponsiveContainer>
   )
