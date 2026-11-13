@@ -1,0 +1,106 @@
+import { pt } from './helpers.js'
+
+// End-of-stage practical assessment: an unfamiliar problem, scored on the same 8 questions every time.
+export const ASSESS_CRITERIA = [
+  { id: 'understood', label: 'Did I understand the problem?' },
+  { id: 'requirements', label: 'Did I identify the important requirements?' },
+  { id: 'bottlenecks', label: 'Did I identify the bottlenecks?' },
+  { id: 'components', label: 'Did I choose suitable components?' },
+  { id: 'why', label: 'Can I explain why I selected them?' },
+  { id: 'tradeoffs', label: 'Do I understand the trade-offs?' },
+  { id: 'failures', label: 'Can I identify failure scenarios?' },
+  { id: 'improve', label: 'Can I improve my design?' },
+]
+
+export const ASSESSMENTS = {
+  1: {
+    title: 'Stage 1 assessment: the slow login',
+    prompt: 'A small company\'s web app loads in 1 s for staff in Mumbai but takes 6 s for customers in London, and the login page occasionally shows "session expired" right after logging in. The site runs on one server in Mumbai. Walk through what could cause each symptom using what you know about DNS, HTTP, TCP/TLS, sessions and servers, and propose fixes.',
+    revisit: { understood: ['web-journey'], requirements: ['web-journey'], bottlenecks: ['web-journey', 'ip-dns'], components: ['http-rest', 'login-flow'], why: ['http-rest'], tradeoffs: ['ip-dns'], failures: ['login-flow'], improve: ['web-journey'] },
+    points: [
+      { c: 'understood', p: pt('Separates the two symptoms (latency by region; session errors)', 'two', 'separate', 'symptom', 'london', 'session') },
+      { c: 'requirements', p: pt('States what "good" is (e.g. page under 2 s, sessions reliable)', 'second', 'target', 'goal', 'under') },
+      { c: 'bottlenecks', p: pt('Names network round trips / distance (DNS, TCP, TLS, many requests)', 'distance', 'round trip', 'latency', 'tls') },
+      { c: 'components', p: pt('Suggests CDN / edge and connection reuse / fewer requests', 'cdn', 'edge', 'keep-alive', 'compress') },
+      { c: 'why', p: pt('Explains why a CDN helps (shorter path for static assets)', 'closer', 'nearby', 'shorter', 'static') },
+      { c: 'tradeoffs', p: pt('Mentions caching staleness, cost or TTL trade-off', 'stale', 'cost', 'ttl', 'invalidat') },
+      { c: 'failures', p: pt('Explains session expiry (token not stored/shared, cookie flags, clock, multiple servers)', 'cookie', 'session store', 'redis', 'expiry', 'secure', 'multiple') },
+      { c: 'improve', p: pt('Plans next steps (second region, shared session store, monitoring)', 'region', 'redis', 'monitor', 'measure') },
+    ],
+  },
+  2: {
+    title: 'Stage 2 assessment: the slow dashboard',
+    prompt: 'A reporting page for an online shop takes 12 seconds to load. It lists the 50 latest orders with customer names and item counts. The orders table has 80 million rows. CPU on the web server is 10%, database CPU is 95%. Diagnose the problem, name two or three possible causes, explain how you would confirm each, and propose a fix order.',
+    revisit: { understood: ['why-slow'], requirements: ['why-slow'], bottlenecks: ['why-slow', 'indexing'], components: ['indexing', 'databases'], why: ['indexing'], tradeoffs: ['indexing'], failures: ['transactions-acid'], improve: ['why-slow'] },
+    points: [
+      { c: 'understood', p: pt('Recognises the database is the bottleneck (95% CPU, idle web server)', 'database', 'db', 'bottleneck') },
+      { c: 'requirements', p: pt('Defines target (e.g. under 1 s) and freshness needs', 'under', 'second', 'target', 'fresh') },
+      { c: 'bottlenecks', p: pt('Suspects missing index / full scan and N+1 queries', 'index', 'scan', 'n+1') },
+      { c: 'components', p: pt('Uses EXPLAIN ANALYZE / slow query log to confirm', 'explain', 'slow query', 'log') },
+      { c: 'why', p: pt('Explains composite index (created_at DESC) or join/batch instead of N+1', 'composite', 'created_at', 'join', 'batch') },
+      { c: 'tradeoffs', p: pt('Notes index write cost; caching staleness', 'write', 'cost', 'stale') },
+      { c: 'failures', p: pt('Considers pool exhaustion/timeouts or lock contention', 'pool', 'timeout', 'connection', 'lock') },
+      { c: 'improve', p: pt('Next steps: caching, read replica, keyset pagination', 'cache', 'replica', 'keyset', 'paginat') },
+    ],
+  },
+  3: {
+    title: 'Stage 3 assessment: the product launch spike',
+    prompt: 'Your single-server shop (app + PostgreSQL on one machine) will be featured on TV next week: expect 50x normal traffic for an hour, mostly people browsing product pages and about 3% placing orders. Design the changes. Justify each component with a reason tied to the traffic, and say what could still go wrong.',
+    revisit: { understood: ['why-slow'], requirements: ['framework'], bottlenecks: ['why-slow', 'scaling'], components: ['load-balancing', 'caching', 'cdn'], why: ['caching'], tradeoffs: ['caching', 'queues'], failures: ['replication-sharding', 'queues'], improve: ['rate-limiting'] },
+    points: [
+      { c: 'understood', p: pt('Notes read-heavy browsing vs small write share and a short spike', 'read', 'browsing', 'spike', 'write') },
+      { c: 'requirements', p: pt('States goals (stay up, fast browse, never lose orders)', 'availab', 'lose', 'orders', 'fast') },
+      { c: 'bottlenecks', p: pt('Identifies the DB and single server as bottlenecks', 'database', 'single server', 'bottleneck') },
+      { c: 'components', p: pt('CDN for assets, cache for product pages, load balancer + more stateless servers, read replica', 'cdn', 'cache', 'load balancer', 'replica') },
+      { c: 'why', p: pt('Ties each component to the traffic mix', 'because', 'since', 'read-heavy', 'so that') },
+      { c: 'tradeoffs', p: pt('Stale prices/stock vs speed; cost of temporary capacity', 'stale', 'cost', 'trade') },
+      { c: 'failures', p: pt('Queue/async for orders, idempotency, inventory overselling, cache stampede', 'queue', 'idempot', 'oversell', 'stampede') },
+      { c: 'improve', p: pt('Load test, rate limiting / waiting room, monitoring and rollback plan', 'load test', 'rate limit', 'waiting', 'monitor') },
+    ],
+  },
+  4: {
+    title: 'Stage 4 assessment: payments that went wrong',
+    prompt: 'A ticketing system has Orders, Payments and Seats services, each with its own database. On launch day some customers are charged but get no ticket, some get two tickets for one payment, and a few seats are sold twice. Explain the likely causes and redesign the booking flow to be correct under crashes, retries and network partitions.',
+    revisit: { understood: ['distributed-intro'], requirements: ['cap-consistency'], bottlenecks: ['idempotency-retries'], components: ['dist-transactions', 'queues'], why: ['dist-transactions'], tradeoffs: ['cap-consistency'], failures: ['idempotency-retries', 'consensus-locks'], improve: ['event-driven-obs'] },
+    points: [
+      { c: 'understood', p: pt('Maps each symptom to a cause (lost reply, retry, race)', 'retry', 'race', 'lost', 'timeout') },
+      { c: 'requirements', p: pt('Seat inventory needs strong consistency; others can be eventual', 'strong', 'consisten', 'eventual') },
+      { c: 'bottlenecks', p: pt('Identifies cross-service atomicity gap', 'atomic', 'cross-service', 'distributed transaction') },
+      { c: 'components', p: pt('Saga/orchestrator, seat hold with TTL, atomic conditional update', 'saga', 'hold', 'ttl', 'conditional') },
+      { c: 'why', p: pt('Explains compensation (refund/release) and ordering of steps', 'compensat', 'refund', 'release') },
+      { c: 'tradeoffs', p: pt('Contrasts 2PC (blocking) with sagas (eventual, visible pending)', '2pc', 'pending', 'blocking') },
+      { c: 'failures', p: pt('Idempotency keys, outbox, DLQ, orchestrator crash recovery', 'idempot', 'outbox', 'dlq', 'recover') },
+      { c: 'improve', p: pt('Observability, reconciliation job, alerts for stuck sagas', 'reconcil', 'trace', 'alert', 'monitor') },
+    ],
+  },
+  5: {
+    title: 'Stage 5 assessment: the unfamiliar problem',
+    prompt: 'Design a "parking spot reservation" service for 2,000 city car parks with 200,000 daily users. Run the 12-step framework in writing: requirements, non-functional requirements, assumptions, numeric estimates, API, data model, high-level design, one deep-dive, bottlenecks, trade-offs, improvements.',
+    revisit: { understood: ['framework'], requirements: ['framework'], bottlenecks: ['estimation'], components: ['framework'], why: ['framework'], tradeoffs: ['cap-consistency'], failures: ['distributed-intro'], improve: ['framework'] },
+    points: [
+      { c: 'understood', p: pt('Restates the problem and scope; asks clarifying questions', 'scope', 'clarif', 'assum') },
+      { c: 'requirements', p: pt('Functional + non-functional (consistency of booking, latency, availability)', 'functional', 'consisten', 'availab') },
+      { c: 'bottlenecks', p: pt('Numeric estimate (QPS, storage) and peak (rush hours)', 'qps', 'peak', 'per second') },
+      { c: 'components', p: pt('API + schema + high-level components', 'api', 'schema', 'database', 'cache') },
+      { c: 'why', p: pt('Justifies choices with numbers or requirements', 'because', 'since', 'so that') },
+      { c: 'tradeoffs', p: pt('Names trade-offs (e.g. strong consistency on a spot vs availability)', 'trade', 'consisten', 'availab') },
+      { c: 'failures', p: pt('Handles double booking, expiry of holds, payment failure', 'double', 'hold', 'expire', 'payment') },
+      { c: 'improve', p: pt('Mentions scaling, monitoring, future features', 'scale', 'monitor', 'future') },
+    ],
+  },
+  6: {
+    title: 'Stage 6 assessment: design a food delivery matcher',
+    prompt: 'Unseen problem: design the order-to-courier matching part of a food delivery app in one city with 50,000 orders/hour at peak. Orders arrive, restaurants prepare food, couriers move continuously. Decide how matching works, how location data is stored and queried, and how you handle courier churn, restaurant delays and retries.',
+    revisit: { understood: ['framework'], requirements: ['framework'], bottlenecks: ['estimation', 'why-slow'], components: ['queues', 'caching'], why: ['framework'], tradeoffs: ['cap-consistency'], failures: ['idempotency-retries'], improve: ['event-driven-obs'] },
+    points: [
+      { c: 'understood', p: pt('Clarifies goals: ETA, fairness, utilisation', 'eta', 'fair', 'util', 'goal') },
+      { c: 'requirements', p: pt('Latency and consistency requirements for assignment', 'latency', 'consisten', 'one courier') },
+      { c: 'bottlenecks', p: pt('Estimates location-update QPS and matching load', 'qps', 'location update', 'per second') },
+      { c: 'components', p: pt('Geo index (geohash/H3/quadtree), cache for locations, queue for orders', 'geohash', 'h3', 'quadtree', 'geo', 'redis') },
+      { c: 'why', p: pt('Explains why those fit the access pattern (nearby search)', 'nearby', 'radius', 'cell') },
+      { c: 'tradeoffs', p: pt('Batching matches vs instant greedy; accuracy vs freshness of locations', 'batch', 'greedy', 'fresh', 'trade') },
+      { c: 'failures', p: pt('Courier declines/drops, restaurant delay, duplicate assignment (idempotency)', 'decline', 'timeout', 'idempot', 'reassign') },
+      { c: 'improve', p: pt('Monitoring, simulation/load tests, surge handling', 'monitor', 'simulat', 'surge', 'load test') },
+    ],
+  },
+}

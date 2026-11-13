@@ -37,4 +37,5 @@ export const emptyState = () => ({
   dayTypes: {},
   plans: {},
   reviews: {},
+  sd: null, // System Design module; created on first use (see domain/sd/engine.js)
 })

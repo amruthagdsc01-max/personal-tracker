@@ -7,7 +7,7 @@ import { fmt } from '../domain/dates.js'
 import Standing from '../components/Standing.jsx'
 import { topicLabel } from '../domain/mock.js'
 
-const COLORS = ['#4A1A09', '#C2475E', '#EBA9A5', '#7A3F2B', '#6F8F5F', '#C58B3C']
+const COLORS = ['#4A1A09', '#C2562F', '#EBA9A5', '#7A3F2B', '#6F8F5F', '#C58B3C']
 
 export default function Progress({ go }) {
   const { state, date } = useStore()
@@ -70,7 +70,7 @@ export default function Progress({ go }) {
           {Object.keys(apt).length ? <div className="mod-list">{Object.entries(APT_TOPICS).map(([k, l]) => { const [c, n] = apt[k] || [0, 0]; return <div key={k} className="mod"><span>{l}</span><Bar pct={n ? (c / n) * 100 : 0} tone="accent" /><small>{n ? Math.round((c / n) * 100) : 0}%</small></div> })}</div> : <p className="muted">No aptitude sessions yet.</p>}
           <h2 style={{ marginTop: 22 }}>Application funnel</h2>
           <ResponsiveContainer width="100%" height={150}>
-            <BarChart data={Object.entries(f).map(([name, v]) => ({ name, v }))} layout="vertical"><CartesianGrid horizontal={false} stroke="#F6CFCA" /><XAxis type="number" hide allowDecimals={false} /><YAxis type="category" dataKey="name" width={80} tickLine={false} axisLine={false} /><Tooltip cursor={{ fill: '#FFE0DC' }} /><RBar dataKey="v" fill="#C2475E" radius={[0, 8, 8, 0]} /></BarChart>
+            <BarChart data={Object.entries(f).map(([name, v]) => ({ name, v }))} layout="vertical"><CartesianGrid horizontal={false} stroke="#EAD5B5" /><XAxis type="number" hide allowDecimals={false} /><YAxis type="category" dataKey="name" width={80} tickLine={false} axisLine={false} /><Tooltip cursor={{ fill: '#F5E2C6' }} /><RBar dataKey="v" fill="#C2562F" radius={[0, 8, 8, 0]} /></BarChart>
           </ResponsiveContainer>
           <p className="muted"><b>{bn.found ? `Possible bottleneck: ${bn.area}. ` : ''}</b>{bn.message}</p>
         </Card>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Home as HomeIcon, CalendarCheck, Code2, BookOpen, Hammer, Dumbbell, Mic2, Briefcase, BarChart3, Settings as Cog, Search, Cloud, CloudOff, Loader2, LogIn, CalendarDays } from 'lucide-react'
+import { Home as HomeIcon, CalendarCheck, Code2, BookOpen, Network, Hammer, Dumbbell, Mic2, Briefcase, BarChart3, Settings as Cog, Search, Cloud, CloudOff, Loader2, LogIn, CalendarDays } from 'lucide-react'
 import { useStore } from './store.jsx'
 import CommandPalette from './components/CommandPalette.jsx'
 import { ShadowBranch, FlowerBranch } from './components/Floral.jsx'
@@ -8,6 +8,7 @@ import Today from './pages/Today.jsx'
 import DSA from './pages/DSA.jsx'
 import Learn from './pages/Learn.jsx'
 import Build from './pages/Build.jsx'
+import SystemDesign from './pages/SystemDesign.jsx'
 import Practice from './pages/Practice.jsx'
 import Mock from './pages/Mock.jsx'
 import Career from './pages/Career.jsx'
@@ -22,6 +23,7 @@ const PAGES = [
   { id: 'today', label: 'Today', icon: CalendarCheck, C: Today },
   { id: 'dsa', label: 'DSA', icon: Code2, C: DSA },
   { id: 'learn', label: 'Learn', icon: BookOpen, C: Learn },
+  { id: 'design', label: 'Design', icon: Network, C: SystemDesign },
   { id: 'build', label: 'Build', icon: Hammer, C: Build },
   { id: 'practice', label: 'Practice', icon: Dumbbell, C: Practice },
   { id: 'mock', label: 'Mock', icon: Mic2, C: Mock },
@@ -31,7 +33,7 @@ const PAGES = [
 ]
 
 const fromHash = () => {
-  const h = window.location.hash.replace('#/', '')
+  const h = window.location.hash.replace('#/', '').split('/')[0] // sub-routes like #/design/lesson/caching belong to the page
   return PAGES.some((p) => p.id === h) ? h : 'home'
 }
 
@@ -77,7 +79,7 @@ export default function App() {
         <button className="brand" onClick={() => go('home')}><b className="logo">ezze</b></button>
         <div className="nav-links">
           {PAGES.map(({ id, label, icon: Icon }) => (
-            <button key={id} className={page === id ? 'on' : ''} onClick={() => go(id)}><Icon size={18} /><span>{id === 'settings' ? '' : label}</span></button>
+            <button key={id} className={page === id ? 'on' : ''} onClick={() => go(id)}><Icon size={18} /><span>{label}</span></button>
           ))}
         </div>
         <button className="cal-btn" onClick={() => setCalOpen(true)} aria-label="Open calendar" title="Calendar"><CalendarDays size={18} /></button>
